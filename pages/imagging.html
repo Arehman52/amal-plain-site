@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-3 mr-1 WINDOW_BORDERS">
+            <h3 style="text-align: center;">Annotations list</h3>
+
+
+            <table>
+                <tr>
+                    <th>open</th>
+                </tr>
+                <tr id="LIST-tr">
+                    <td><button class="btn btn-info btn-sm" onClick="openAnnotation(item)">view</button></td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        <div class="col min-vh-80 WINDOW_BORDERS">
+            <h3>Canvas</h3>
+            <div>
+                <button class="btn btn-primary btn-sm mr-1" onClick="setTool('circle')">
+                    Circle
+                </button>
+                <button class="btn btn-primary btn-sm mr-1" onClick="setTool('ellipse')">
+                    Elipse
+                </button>
+                <button class="btn btn-primary btn-sm mr-2" onClick="setTool('rect')">
+                    Rectangle
+                </button>
+            </div>
+
+            <!-- /////////////////////////////////////////////////////////////////////////////// -->
+            <!-- /////////////////////                                        ////////////////// -->
+            <!-- /////////////////////         the canvas code below          ////////////////// -->
+            <!-- /////////////////////                                        ////////////////// -->
+            <!-- /////////////////////////////////////////////////////////////////////////////// -->
+            <div class="column">
+                <div class="main-content">
+                    <div class="inline-demo">
+                        <div id="toolbar"></div>
+                        <div id="openseadragon"></div>
+                        
+                        <style>
+                            #toolbar {
+                                margin-bottom: 10px;
+                            }
+
+                            .openseadragon-canvas {
+                                outline: none;
+                                background-color: #e60e0e !important;
+                                border-radius: 3px;
+                            }
+
+                            #openseadragon {
+                                max-width: 940px;
+                                height: 600px;
+                                width: 100%;
+                            }
+
+                            @media only screen and (max-width: 800px) {
+                                .r6o-editor {
+                                    width: 260px !important;
+                                }
+                            }
+                        </style>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- /////////////////////////////////////////////////////////////////////////////// -->
+            <!-- /////////////////////                                        ////////////////// -->
+            <!-- /////////////////////         the canvas code above          ////////////////// -->
+            <!-- /////////////////////                                        ////////////////// -->
+            <!-- /////////////////////////////////////////////////////////////////////////////// -->
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+
+
+
+    <script type="text/javascript" src="assets\js\openseadragon\openseadragon.3.0.0.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.7/dist/annotorious.min.css">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.7/dist/openseadragon-annotorious.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-toolbar@0.1.1/dist/annotorious-toolbar.min.js"></script> -->
+
+    <!-- Selector Pack plugin -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-selector-pack@latest/dist/annotorious-selector-pack.min.js"></script>
+
+        <script>
+            var viewer;
+            var anno;
+            var LIST = [];
+
+            ngOnInit();
+
+            var duomo = {
+                Image: {
+                    xmlns: 'http://schemas.microsoft.com/deepzoom/2008',
+                    Url: '//openseadragon.github.io/example-images/duomo/duomo_files/',
+                    Format: 'jpg',
+                    Overlap: '2',
+                    TileSize: '256',
+                    Size: {
+                        Width: '13920',
+                        Height: '10200',
+                    },
+                },
+            };
+
+            var sampleAnnotation = {
+                '@context': 'http://www.w3.org/ns/anno.jsonld',
+                id: '#09475897-d2eb-4dce-aa12-ecb50771c734',
+                type: 'Annotation',
+                body: [
+                    {
+                        type: 'TextualBody',
+                        value: 'Annotation',
+                    },
+                ],
+                target: {
+                    selector: {
+                        type: 'FragmentSelector',
+                        conformsTo: 'http://www.w3.org/TR/media-frags/',
+                        value: 'xywh=540,240,180,340',
+                    },
+                },
+            };
+
+            function ngOnInit() {
+                var viewer = OpenSeadragon({
+                    id: 'openseadragon',
+                    prefixUrl:
+                        'https://cdn.jsdelivr.net/npm/openseadragon@2.3/build/openseadragon/images/',
+                    tileSources: {
+                        type: 'image',
+                        url: 'assets/js/openseadragon/image.jpg',
+                    },
+                });
+
+                var anno = OpenSeadragon.Annotorious(viewer, {
+                    locale: 'auto',
+                    allowEmpty: true,
+                    drawOnSingleClick: false,
+                    hotkey: { key: 'shift', inverted: true },
+                    disableEditor: true,
+                });
+
+                anno.addAnnotation(sampleAnnotation);
+
+                // Init the plugin
+                Annotorious.SelectorPack(anno);
+
+
+                // Add event handlers using .on
+                anno.on('createAnnotation', (e) => {
+                    if (e) {
+                        LIST.push(e);
+                    }
+                });
+            }
+
+            function setTool(tool) {
+                alert(tool);
+                anno.setDrawingTool(tool);
+            }
+
+            function saveAnnotation(e) {
+                if (e) {
+                    console.log(e);
+                    LIST.push(e['id']);
+                }
+            }
+
+            function openAnnotation(annot) {
+                anno.selectAnnotation(annot);
+            }
+        </script>
+</body>
+
+</html>

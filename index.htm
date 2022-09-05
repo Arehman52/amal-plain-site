@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    
+    
+</head>
+<body>
+    <style>
+        #toolbar {
+            margin-bottom: 10px;
+        }
+
+        .openseadragon-canvas {
+            outline: none;
+            background-color: #f4f4f4 !important;
+            border-radius: 3px;
+        }
+
+        #openseadragon {
+            max-width: 640px;
+            height: 400px;
+            width: 100%;
+        }
+
+        @media only screen and (max-width: 800px) {
+            .r6o-editor {
+                width: 260px !important;
+            }
+        }
+    </style>
+    <div id="toolbar"></div>
+    <div id="openseadragon" style="width:800px; height:600px; background-color: brown;"></div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/openseadragon.min.js"></script>
+    <script src="http://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+    <script src="script.js"></script> -->
+
+
+    <script type="text/javascript" src="/js/openseadragon/openseadragon.3.0.0.min.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.7/dist/annotorious.min.css">
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-openseadragon@2.7.7/dist/openseadragon-annotorious.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious-toolbar@0.1.1/dist/annotorious-toolbar.min.js"></script>
+            <script>
+                var sampleAnnotation = {
+                    "@context": "http://www.w3.org/ns/anno.jsonld",
+                    "id": "#07475897-d2eb-4dce-aa12-ecb50771c734",
+                    "type": "Annotation",
+                    "body": [{
+                        "type": "TextualBody",
+                        "value": "Annotation"
+                    }],
+                    "target": {
+                        "selector": {
+                            "type": "FragmentSelector",
+                            "conformsTo": "http://www.w3.org/TR/media-frags/",
+                            "value": "xywh=540,240,180,340"
+                        }
+                    }
+                };
+
+                window.onload = function() {
+                    var viewer = OpenSeadragon({
+                        id: "openseadragon",
+                        prefixUrl: "/js/openseadragon/images/",
+                        tileSources: {
+                            type: "image",
+                            url: "/images/image.jpg"
+                        },
+                        gestureSettingsTouch: {
+                            pinchRotate: true
+                        }
+                    });
+
+                    var anno = OpenSeadragon.Annotorious(viewer, {
+                        locale: 'auto',
+                        allowEmpty: true
+                    });
+                    
+                    Annotorious.Toolbar(anno, document.getElementById('toolbar'));
+                    
+                    anno.addAnnotation(sampleAnnotation);
+                }
+            </script>
+
+            
+</body>
+</html>
+
+<!-- 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<body>
+    <div id="seadragon-viewer" style="width:800px; height:600px; background-color: brown;"></div>
+<script src="http://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html> -->
